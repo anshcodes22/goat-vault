@@ -96,13 +96,14 @@ export const RevisionPage = () => {
   }, [fetchRevisionCandidates]);
 
   // Handle recording revision directly from list
-  const handleRecordRevisit = async ({ notes, variantReviewed }) => {
+  const handleRecordRevisit = async ({ notes, variantReviewed, solveStatus }) => {
     if (!revisitModalProblem) return;
     try {
       setIsRevisiting(true);
       const res = await problemService.markAsRevisited(revisitModalProblem._id, {
         notes,
-        variantReviewed
+        variantReviewed,
+        solveStatus
       });
       if (res.success) {
         setRevisitModalProblem(null);
@@ -330,6 +331,16 @@ export const RevisionPage = () => {
                     </div>
                   );
                 })()}
+
+                {/* First Solve Status */}
+                {prob.firstSolveStatus && (
+                  <div className="p-2.5 rounded-lg bg-blue-50/60 border border-blue-200/70 mb-3 text-xs text-blue-950 flex items-start gap-1.5">
+                    <span className="font-bold text-blue-700 uppercase text-[10px] tracking-wider px-1.5 py-0.5 rounded bg-blue-100 border border-blue-200 flex-shrink-0">
+                      1st Solve
+                    </span>
+                    <span className="font-medium">{prob.firstSolveStatus}</span>
+                  </div>
+                )}
 
                 {/* Confusion / Mistakes Preview if any */}
                 {prob.confusionNotes ? (

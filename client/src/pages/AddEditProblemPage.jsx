@@ -10,7 +10,8 @@ import {
   AlertCircle,
   ExternalLink,
   Layers,
-  Calendar
+  Calendar,
+  Sparkles
 } from 'lucide-react';
 import { problemService } from '../services/api';
 import { TopicSelector } from '../components/TopicSelector';
@@ -36,6 +37,7 @@ export const AddEditProblemPage = () => {
   const [problemUrl, setProblemUrl] = useState('');
   const [difficulty, setDifficulty] = useState('Medium');
   const [language, setLanguage] = useState('C++');
+  const [firstSolveStatus, setFirstSolveStatus] = useState('');
   const [firstSolvedAt, setFirstSolvedAt] = useState(
     new Date().toISOString().split('T')[0]
   );
@@ -104,6 +106,7 @@ export const AddEditProblemPage = () => {
           setProblemUrl(p.problemUrl || '');
           setDifficulty(p.difficulty || 'Medium');
           setLanguage(p.language || 'C++');
+          setFirstSolveStatus(p.firstSolveStatus || '');
           if (p.firstSolvedAt) {
             setFirstSolvedAt(new Date(p.firstSolvedAt).toISOString().split('T')[0]);
           }
@@ -202,6 +205,7 @@ export const AddEditProblemPage = () => {
         topics: selectedTopics,
         customTags: selectedCustomTags,
         language,
+        firstSolveStatus: firstSolveStatus.trim(),
         firstSolvedAt: new Date(firstSolvedAt),
         confusionNotes,
         approaches: approachesToSave
@@ -422,6 +426,24 @@ export const AddEditProblemPage = () => {
               value={problemUrl}
               onChange={(e) => setProblemUrl(e.target.value)}
               className="w-full text-sm rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
+            />
+          </div>
+
+          {/* First Solve Status / Self-Assessment */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+              <span className="flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+                <span>Did you figure it out on first solve?</span>
+              </span>
+              <span className="text-[11px] text-slate-400 font-normal">Self assessment (optional)</span>
+            </label>
+            <input
+              type="text"
+              placeholder="e.g. Solved independently without hints, Needed a hint on Kadane base case, Looked at solution after 25 mins..."
+              value={firstSolveStatus}
+              onChange={(e) => setFirstSolveStatus(e.target.value)}
+              className="w-full text-sm rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors"
             />
           </div>
         </div>

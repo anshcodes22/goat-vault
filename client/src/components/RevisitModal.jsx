@@ -10,6 +10,7 @@ export const RevisitModal = ({
   isSubmitting = false
 }) => {
   const [notes, setNotes] = useState('');
+  const [solveStatus, setSolveStatus] = useState('');
   const [variantReviewed, setVariantReviewed] = useState(
     problem?.approaches?.[0]?.name || ''
   );
@@ -20,7 +21,8 @@ export const RevisitModal = ({
     e.preventDefault();
     onConfirm({
       notes,
-      variantReviewed: variantReviewed || (problem.approaches?.[0]?.name || '')
+      variantReviewed: variantReviewed || (problem.approaches?.[0]?.name || ''),
+      solveStatus: solveStatus.trim()
     });
   };
 
@@ -76,6 +78,29 @@ export const RevisitModal = ({
                   ));
                 })()}
               </select>
+            </div>
+
+            {problem.firstSolveStatus && (
+              <div className="text-xs text-slate-600 bg-blue-50/50 p-2.5 rounded-lg border border-blue-100 flex items-start gap-2">
+                <span className="font-semibold text-blue-700 uppercase text-[10px] tracking-wider px-1.5 py-0.5 rounded bg-blue-100 flex-shrink-0">
+                  First Solve
+                </span>
+                <span>{problem.firstSolveStatus}</span>
+              </div>
+            )}
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                <span>Did you figure it out this time?</span>
+                <span className="text-[11px] text-slate-400 font-normal">Self assessment</span>
+              </label>
+              <input
+                type="text"
+                value={solveStatus}
+                onChange={(e) => setSolveStatus(e.target.value)}
+                placeholder="e.g. Solved independently in 10 mins, Needed to recall recurrence formula, Forgot edge case, etc."
+                className="w-full text-sm rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors"
+              />
             </div>
 
             <div>

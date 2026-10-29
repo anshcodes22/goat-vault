@@ -168,13 +168,14 @@ export const ProblemsListPage = () => {
   ].filter(Boolean).length;
 
   // Handle revisit action
-  const handleRecordRevisit = async ({ notes, variantReviewed }) => {
+  const handleRecordRevisit = async ({ notes, variantReviewed, solveStatus }) => {
     if (!revisitModalProblem) return;
     try {
       setIsRevisiting(true);
       const res = await problemService.markAsRevisited(revisitModalProblem._id, {
         notes,
-        variantReviewed
+        variantReviewed,
+        solveStatus
       });
       if (res.success) {
         setRevisitModalProblem(null);

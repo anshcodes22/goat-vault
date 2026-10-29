@@ -282,6 +282,7 @@ const createProblem = async (req, res, next) => {
       topics,
       customTags,
       language,
+      firstSolveStatus,
       confusionNotes,
       firstSolvedAt,
       approaches
@@ -357,6 +358,7 @@ const createProblem = async (req, res, next) => {
         ? Array.from(new Set(customTags.filter(Boolean).map((t) => t.trim())))
         : [],
       language: language || 'C++',
+      firstSolveStatus: (firstSolveStatus || '').trim(),
       confusionNotes: confusionNotes || '',
       firstSolvedAt: firstSolvedAt ? new Date(firstSolvedAt) : new Date(),
       approaches: processedApproaches,
@@ -400,6 +402,7 @@ const updateProblem = async (req, res, next) => {
       topics,
       customTags,
       language,
+      firstSolveStatus,
       confusionNotes,
       firstSolvedAt, // If provided explicitly, allow user to correct historical date
       approaches
@@ -440,6 +443,7 @@ const updateProblem = async (req, res, next) => {
       syncCustomTags(problem.customTags);
     }
     if (language !== undefined) problem.language = language;
+    if (firstSolveStatus !== undefined) problem.firstSolveStatus = firstSolveStatus.trim();
     if (confusionNotes !== undefined) problem.confusionNotes = confusionNotes;
 
     // Preserve firstSolvedAt unless user specifically changed historical solve date
@@ -499,12 +503,13 @@ const markAsRevisited = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Problem not found' });
     }
 
-    const { notes = '', variantReviewed = '' } = req.body;
+    const { notes = '', variantReviewed = '', solveStatus = '' } = req.body;
     const now = new Date();
 
     const revisionEvent = {
       id: crypto.randomUUID(),
       timestamp: now,
+      solveStatus: (solveStatus || '').trim(),
       notes: notes.trim(),
       variantReviewed: variantReviewed.trim()
     };

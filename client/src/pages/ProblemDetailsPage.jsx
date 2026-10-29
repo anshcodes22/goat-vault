@@ -230,12 +230,13 @@ export const ProblemDetailsPage = () => {
   };
 
   // Record a revisit event
-  const handleRecordRevisit = async ({ notes, variantReviewed }) => {
+  const handleRecordRevisit = async ({ notes, variantReviewed, solveStatus }) => {
     try {
       setIsSubmittingRevisit(true);
       const res = await problemService.markAsRevisited(problem._id, {
         notes,
-        variantReviewed
+        variantReviewed,
+        solveStatus
       });
       if (res.success && res.problem) {
         setProblem(res.problem);
@@ -382,6 +383,16 @@ export const ProblemDetailsPage = () => {
                 </Link>
               ))}
             </div>
+
+            {/* First Time Solve Status */}
+            {problem.firstSolveStatus && (
+              <div className="flex items-start sm:items-center gap-2 p-2.5 rounded-xl bg-blue-50/70 border border-blue-200/80 text-xs text-blue-950">
+                <span className="font-bold text-blue-700 uppercase text-[10px] tracking-wider px-2 py-0.5 rounded-md bg-blue-100 border border-blue-200 flex-shrink-0">
+                  First Solve Outcome
+                </span>
+                <span className="font-medium leading-relaxed">{problem.firstSolveStatus}</span>
+              </div>
+            )}
           </div>
 
           {/* Quick Metrics & Revisit CTA */}
@@ -701,6 +712,15 @@ export const ProblemDetailsPage = () => {
                       <span className="inline-block px-2 py-0.5 text-[10px] font-medium rounded bg-blue-50 text-blue-700 border border-blue-200">
                         Variant: {rev.variantReviewed}
                       </span>
+                    </div>
+                  )}
+
+                  {rev.solveStatus && (
+                    <div className="mb-2 p-2 rounded-lg bg-emerald-50/70 border border-emerald-200/60 text-xs text-emerald-950 flex items-start gap-2">
+                      <span className="font-bold text-emerald-800 uppercase text-[10px] tracking-wider px-1.5 py-0.5 rounded bg-emerald-100 border border-emerald-200 flex-shrink-0">
+                        Revisit Assessment
+                      </span>
+                      <span className="font-medium leading-relaxed">{rev.solveStatus}</span>
                     </div>
                   )}
 

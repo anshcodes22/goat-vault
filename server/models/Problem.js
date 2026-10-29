@@ -53,6 +53,11 @@ const RevisionEventSchema = new mongoose.Schema(
       default: Date.now,
       required: true
     },
+    solveStatus: {
+      type: String,
+      default: '',
+      trim: true
+    },
     notes: {
       type: String,
       default: ''
@@ -109,6 +114,11 @@ const ProblemSchema = new mongoose.Schema(
     language: {
       type: String,
       default: 'C++'
+    },
+    firstSolveStatus: {
+      type: String,
+      default: '',
+      trim: true
     },
     confusionNotes: {
       type: String,
